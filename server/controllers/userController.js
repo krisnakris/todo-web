@@ -33,7 +33,6 @@ class UserController {
     })
       .then(user => {
         if (user) {
-          console.log(user[0].password);
           let checkPassword = comparePassword(password, user[0].password);
 
           if (checkPassword) {
@@ -54,8 +53,16 @@ class UserController {
         }
       })
       .catch(err => {
-        console.log(err);
-        res.status(500).json({message : 'internal server error'})
+        let errorMessage;
+
+        if (err.message) {
+          errorMessage = err.message;
+        } else {
+          errorMessage = 'internal server errror';
+        }
+
+        res.status(500).json({message : errorMessage})
+
       })
   }
 }
