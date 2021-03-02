@@ -46,7 +46,7 @@ class UserController {
             const acessToken = jwt.sign({ 
               id, email
             },
-              'sweet kitten'
+              process.env.SECRETKEY
             )
             res.status(200).json({ acessToken }) 
           } else {

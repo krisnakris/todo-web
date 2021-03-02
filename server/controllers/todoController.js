@@ -3,7 +3,6 @@
 class TodoController {
   static createTodo (req, res) {
     let body = req.body;
-    console.log('body: ', body);
 
     let object = {
       title: body.title,
