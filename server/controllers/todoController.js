@@ -3,12 +3,14 @@
 class TodoController {
   static createTodo (req, res) {
     let body = req.body;
+    console.log('body: ', body);
 
     let object = {
       title: body.title,
       description : body.description,
       status : body.status,
-      due_date : body.due_date
+      due_date : body.due_date,
+      UserId : body.UserId
     }
 
     Todo.create(object)
@@ -16,6 +18,7 @@ class TodoController {
         res.status(201).send(data);
       })
       .catch(err => {
+        console.log('err: ', err);
         res.status(500).json({ message : 'internal server error' });
       })
   }

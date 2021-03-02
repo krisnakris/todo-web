@@ -14,7 +14,12 @@ class UserController {
 
     User.create(object)
       .then(data => {
-        res.status(201).json({success: true, message: 'User created', data})
+        let object = {
+          id : data.id,
+          email : data.email
+        }
+
+        res.status(201).json({success: true, message: 'User created', object})
       })
       .catch(err => {
         res.status(500).json({message : 'Internal server error'});
@@ -34,22 +39,22 @@ class UserController {
       .then(user => {
         if (user) {
           let checkPassword = comparePassword(password, user[0].password);
+          let id = user[0].id;
+          let email = user[0].email;
 
           if (checkPassword) {
-            const token = jwt.sign({ 
-              id: user.id, 
-              email: user.email
+            const acessToken = jwt.sign({ 
+              id, email
             },
-              "sweet kitten"
+              'sweet kitten'
             )
-
-             res.status(200).json({ token }) 
+            res.status(200).json({ acessToken }) 
           } else {
-            throw {message : "invalid email or password" }
+            throw { message : "invalid email or password" }
           }
 
         } else {
-          throw {message : "invalid email or password" }
+          throw { message : "invalid email or password" }
         }
       })
       .catch(err => {
@@ -60,7 +65,6 @@ class UserController {
         } else {
           errorMessage = 'internal server errror';
         }
-
         res.status(500).json({message : errorMessage})
 
       })
