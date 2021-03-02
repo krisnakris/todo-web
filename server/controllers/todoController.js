@@ -1,4 +1,6 @@
- const {Todo} = require('../models');
+const {Todo} = require('../models');
+const axios = require('axios');
+const { request } = require('express');
 
 class TodoController {
   static createTodo (req, res) {
@@ -8,16 +10,29 @@ class TodoController {
       title: body.title,
       description : body.description,
       status : body.status,
-      due_date : body.due_date,
-      UserId : body.UserId
+      due_date : body.due_date
     }
 
+    let header = req.headers;
+    object.UserId = header.decoded.id;
+    let hasil = null;
+    
     Todo.create(object)
       .then(data => {
-        res.status(201).send(data);
+        hasil = data;
+        return axios({
+          method : 'GET',
+          url : 'https://stoicquotesapi.com/v1/api/quotes/random'
+        })
+      })
+      .then(quotes => {
+        let Quotes = {
+          quote : quotes.data.body,
+          author : quotes.data.author
+        };
+        res.status(201).json({hasil, Quotes});
       })
       .catch(err => {
-        console.log('err: ', err);
         res.status(500).json({ message : 'internal server error' });
       })
   }

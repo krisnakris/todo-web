@@ -5,7 +5,7 @@ const axios = require('axios');
 
 
 class UserController {
-  static register (req, res) {
+  static register (req, res, next) {
     let body = req.body;
     let email = body.email;
     let password = body.password;
@@ -14,34 +14,21 @@ class UserController {
       email, password
     }
 
-    let hasil = null;
     User.create(object)
       .then(data => {
-          let object = {
+          let createdUser = {
           id : data.id,
           email : data.email
         }
-        hasil = object;
         
-        return axios({
-          method : 'GET',
-          url : 'https://stoicquotesapi.com/v1/api/quotes/random'
-        })
-      })
-      .then(quotes => {
-        let Quotes = {
-          quote : quotes.data.body,
-          author : quotes.data.author
-        };
-        
-        res.status(201).json({success: true, message: 'User created', hasil, Quotes})
+        res.status(201).json({success: true, message: 'User created', createdUser})
       })
       .catch(err => {
-        res.status(500).json({message : 'Internal server error'});
+        next( err )
       })
   }
 
-  static login (req, res) {
+  static login (req, res, next) {
     let body = req.body;
     let email = body.email;
     let password = body.password;
@@ -65,23 +52,22 @@ class UserController {
             )
             res.status(200).json({ acessToken }) 
           } else {
-            throw { message : "invalid email or password" }
+            next ({ 
+              code: 401,
+              message : "Invalid email or password" })
           }
 
         } else {
-          throw { message : "invalid email or password" }
+          next ({ 
+            code: 401, 
+            message : "Invalid email or password" })
         }
       })
       .catch(err => {
-        let errorMessage;
-
-        if (err.message) {
-          errorMessage = err.message;
-        } else {
-          errorMessage = 'internal server errror';
-        }
-        res.status(500).json({message : errorMessage})
-
+        next ({
+          code : 500,
+          message : "Internal server error"
+        })
       })
   }
 }
