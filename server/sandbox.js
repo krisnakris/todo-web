@@ -1,8 +1,12 @@
-const jwt = require('jsonwebtoken')
+const axios = require('axios');
 
-const decoded = jwt.verify (
-'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiZW1haWwiOiJrcmlzbmFAZ21haWwuY29tIiwiaWF0IjoxNjE0NjYwODAzfQ.6IbGSo94uB0axf9OI8mUElC4IVnmNaGk3tLdWAabgo4'
-  , 'sweet kitten'
-)
-
-console.log(decoded);
+axios ({
+  method : 'GET',
+  url : ' https://stoicquotesapi.com/v1/api/quotes/random'
+})
+  .then(response => {
+    console.log(response.data);
+  })
+  .catch(err => {
+    console.log(err);
+  })

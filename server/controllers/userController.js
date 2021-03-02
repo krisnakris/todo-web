@@ -1,6 +1,8 @@
 const {User} = require('../models')
 const {comparePassword} = require('../helpers/bcrypt');
 const jwt = require('jsonwebtoken');
+const axios = require('axios');
+
 
 class UserController {
   static register (req, res) {
@@ -12,14 +14,27 @@ class UserController {
       email, password
     }
 
+    let hasil = null;
     User.create(object)
       .then(data => {
-        let object = {
+          let object = {
           id : data.id,
           email : data.email
         }
-
-        res.status(201).json({success: true, message: 'User created', object})
+        hasil = object;
+        
+        return axios({
+          method : 'GET',
+          url : 'https://stoicquotesapi.com/v1/api/quotes/random'
+        })
+      })
+      .then(quotes => {
+        let Quotes = {
+          quote : quotes.data.body,
+          author : quotes.data.author
+        };
+        
+        res.status(201).json({success: true, message: 'User created', hasil, Quotes})
       })
       .catch(err => {
         res.status(500).json({message : 'Internal server error'});
