@@ -16,7 +16,7 @@ class TodoController {
     let header = req.headers;
     object.UserId = header.decoded.id;
     let hasil = null;
-    
+
     Todo.create(object)
       .then(data => {
         hasil = data;
@@ -33,7 +33,7 @@ class TodoController {
         res.status(201).json({hasil, Quotes});
       })
       .catch(err => {
-        res.status(500).json({ message : 'internal server error' });
+        res.status(500).json({ message : 'Internal server error' });
       })
   }
 
@@ -43,7 +43,7 @@ class TodoController {
         res.status(200).send(data);
       })
       .catch(err => {
-        res.send(500);
+        res.status(500).json({ message : 'Internal server error'});
       })
   }
 
@@ -55,7 +55,7 @@ class TodoController {
         res.status(200).send(data);
       })
       .catch(err => {
-        res.status(404).send({message : 'error not found'});
+        res.status(404).send({message : 'Error not found'});
       })
   }
 
