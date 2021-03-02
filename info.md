@@ -5,6 +5,7 @@ This will create new todos
 Request Header
 {
   "Content-Type":"application/json"
+  "accessToken" : "asijifjaionci2133ir"
 }
 
 Request Body
@@ -30,6 +31,7 @@ Get all todos list
 Request Header
 {
   "Content-Type":"application/json"
+  "accessToken" : "asijifjaionci2133ir"
 }
 
 Request Body
@@ -61,6 +63,7 @@ Get todos based on id
 Request Header
 {
   "Content-Type":"application/json"
+  "accessToken" : "asijifjaionci2133ir"
 }
 
 Request Body
@@ -70,11 +73,11 @@ Request Body
 
 Response 
 {
-"id": 1,
-"title" : "Learn git",
-"description" : "Try fork using others repo",
-"status" : "active",
-"due_date" : "2021-03-21"
+  "id": 1,
+  "title" : "Learn git",
+  "description" : "Try fork using others repo",
+  "status" : "active",
+  "due_date" : "2021-03-21"
 }
 
 ----  PUT /todos/:id  ----
@@ -83,6 +86,7 @@ This will update todos based on Id
 Request Header
 {
   "Content-Type":"application/json"
+  "accessToken" : "asijifjaionci2133ir"
 }
 
 Request Body
@@ -102,9 +106,14 @@ Response
   "due_date" : "2021-03-21"
 }
 
-
 ----  PATCH /todos/:id  ----
 This will update status of todos list
+
+Request Header
+{
+  "Content-Type":"application/json"
+  "accessToken" : "asijifjaionci2133ir"
+}
 
 Request Body
 {
@@ -122,6 +131,12 @@ Response
 
 ----  DELETE /todos/:id  ----
 This will delete status of todos list
+
+Request Header
+{
+  "Content-Type":"application/json"
+  "accessToken" : "asijifjaionci2133ir"
+}
 
 Request Body
 {
