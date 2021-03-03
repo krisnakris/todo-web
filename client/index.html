@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <title>Todos</title>
+</head>
+<body>
+
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href=""" id="nav-todo-btn">Todo</a>
+      </div>
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="" id="nav-home-btn">Home</a></li>
+      </ul>
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="" id="nav-logout-btn">Logout</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div id="before-login">    
+    <!-- Form Untuk login -->
+    <div class="container login-form">
+      <h2>Login</h2>
+      <form>
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input type="email" class="form-control" id="login-email" placeholder="Enter email" name="email">
+        </div>
+        <div class="form-group">
+          <label for="pwd">Password:</label>
+          <input type="password" class="form-control" id="login-password" placeholder="Enter password" name="password">
+        </div>
+
+        <button type="submit" class="btn-primary login-btn" id="login-btn">Login</button>
+        <a id="login-register-btn">Sign Up</a>
+      </form>
+    </div>
+    <!-- Form Untuk login -->
+
+    <!-- Form Untuk register -->
+    <div class="container register-form">
+      <h2>Register</h2>
+      <form>
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input type="email" class="form-control" id="register-email" placeholder="Enter email" name="email" required>
+        </div>
+        <div class="form-group">
+          <label for="pwd">Password:</label>
+          <input type="password" class="form-control" id="register-password" placeholder="Enter password" name="password" required>
+        </div>
+
+        <button type="button" class="btn-danger register-btn" id="register-register-btn">Register</button>
+
+      </form>
+    </div>
+    <!-- Form Untuk register -->
+  </div>
+
+
+  <div id="after-login">
+    <div class="container">
+      <h2>To do List</h2>
+      <ul id="todo-list">
+
+      </ul>      
+    </div>
+  </div>
+  
+  <script src="main.js"></script>
+</body>
+</html>
