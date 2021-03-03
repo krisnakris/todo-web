@@ -1,9 +1,8 @@
 const {Todo} = require('../models');
 const axios = require('axios');
-const { request } = require('express');
 
 class TodoController {
-  static createTodo (req, res) {
+  static createTodo (req, res, next) {
     let body = req.body;
 
     let object = {
@@ -33,21 +32,24 @@ class TodoController {
         res.status(201).json({hasil, Quotes});
       })
       .catch(err => {
-        res.status(500).json({ message : 'Internal server error' });
+        next(err)
       })
   }
 
-  static getTodo (req, res) {
+  static getTodo (req, res, next) {
     Todo.findAll() 
       .then(data => {
         res.status(200).send(data);
       })
       .catch(err => {
-        res.status(500).json({ message : 'Internal server error'});
+        next({
+          code : 500,
+          message : 'Internal server error'
+        })
       })
   }
 
-  static getTodoById (req, res) {
+  static getTodoById (req, res, next) {
     let id = req.params.id;
 
     Todo.findByPk(id)
@@ -55,11 +57,14 @@ class TodoController {
         res.status(200).send(data);
       })
       .catch(err => {
-        res.status(404).send({message : 'Error not found'});
+        next({
+          code : 500,
+          message : 'Internal server error'
+        })
       })
   }
 
-  static putTodo (req, res) {
+  static putTodo (req, res, next) {
     let id = req.params.id;
     let body = req.body;
 
@@ -71,9 +76,9 @@ class TodoController {
     }
 
     Todo.findByPk(id)
-      .then(data => {
-        let createdAt = data.createdAt;
-        let updatedAt = data.updatedAt;
+      .then(todoDb => {
+        let createdAt = todoDb.createdAt;
+        let updatedAt = todoDb.updatedAt;
 
         object.createdAt = createdAt;
         object.updatedAt = updatedAt;
@@ -88,11 +93,11 @@ class TodoController {
         res.status(200).send(object);
       })
       .catch(err => {
-        res.send(err);
+        next(err)
       })
   }
 
-  static patchTodo (req, res) {
+  static patchTodo (req, res, next) {
     let id = req.params.id;
     let body = req.body;
 
@@ -118,15 +123,15 @@ class TodoController {
           }
         })
       })
-      .then(data2 => {
+      .then(todoDbAfterUpdate => {
         res.status(200).send(object);
       })
       .catch(err => {
-        res.send(err);
+        next(err);
       })
   }
 
-  static deleteTodo (req, res) {
+  static deleteTodo (req, res, next) {
     let id = req.params.id;
 
     Todo.destroy({
@@ -135,10 +140,10 @@ class TodoController {
       }
     })
       .then(data => {
-        res.status(200).send({message : 'todo success to delete'});
+        res.status(200).send({message : 'Todo success to delete'});
       })
       .catch(err => {
-        res.status(500).json({ message : 'internal server error'});
+        res.status(500).json({ message : 'Internal server error'});
       })
   }
 }

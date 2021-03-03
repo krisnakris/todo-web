@@ -13,11 +13,17 @@ const authorize = (req, res, next) => {
       if (data.UserId == headerId) {
         next();
       } else {
-        res.status(401).json({ message : 'Unathorized' });
+        next({
+          code : 401,
+          message : "Unauthorized"
+        })
       }
     })
     .catch(err => {
-      res.status(404).json({ message : 'Resource not found' });
+      next({
+        code : 404,
+        message : "Resource not found"
+      })
     })
 }
 
