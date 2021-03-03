@@ -51,8 +51,13 @@ module.exports = (sequelize, DataTypes) => {
     },
     due_date: {
       type: DataTypes.DATE,
+      allowNull: false,
       validate: {
-        isBefore: `${new Date()}`
+        isBefore: `${new Date()}`,
+        notNull: {
+          args: true,
+          msg: 'Field Due Date cannot be empty'
+        }
       }
     }
   }, {
