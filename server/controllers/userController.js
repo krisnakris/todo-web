@@ -44,18 +44,19 @@ class UserController {
       }
     })
       .then(user => {
-        if (user) {
+        if (user.length > 0) {
+
           let checkPassword = comparePassword(password, user[0].password);
           let id = user[0].id;
           let email = user[0].email;
 
           if (checkPassword) {
-            const acessToken = jwt.sign({ 
+            const accessToken = jwt.sign({ 
               id, email
             },
               process.env.SECRETKEY
             )
-            res.status(200).json({ acessToken }) 
+            res.status(200).json({ accessToken }) 
           } else {
             next ({ 
               code: 401,
@@ -69,10 +70,15 @@ class UserController {
         }
       })
       .catch(err => {
-        next ({
-          code : 500,
-          message : "Internal server error"
-        })
+        console.log('err: ', err);
+        if (err.name === 'SequelizeValidationError' || err.name === 'SequelizeUniqueConstraintError') {
+          next(err);
+        } else {
+          next({
+            code : 500,
+            message : 'Internal server error'
+          })
+        }
       })
   }
 }

@@ -9,8 +9,8 @@ const authorize = (req, res, next) => {
       id
     }
   })
-    .then(data => {
-      if (data.UserId == headerId) {
+    .then(todo => {
+      if (todo.UserId == headerId) {
         next();
       } else {
         next({
