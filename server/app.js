@@ -3,11 +3,13 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 const express = require('express');
+var cors = require('cors')
 const app = express();
 const port = 3000;
 const router = require('./routes');
 const errorHandler = require('./middlewares/errorHandler');
 
+app.use(cors());
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
 

@@ -1,8 +1,6 @@
 const {User} = require('../models')
 const {comparePassword} = require('../helpers/bcrypt');
 const jwt = require('jsonwebtoken');
-const axios = require('axios');
-
 
 class UserController {
   static register (req, res, next) {
@@ -24,7 +22,14 @@ class UserController {
         res.status(201).json({success: true, message: 'User created', createdUser})
       })
       .catch(err => {
-        next( err )
+        if (err.name === 'SequelizeValidationError' || err.name === 'SequelizeUniqueConstraintError') {
+          next(err);
+        } else {
+          next({
+            code : 500,
+            message : 'Internal server error'
+          })
+        }
       })
   }
 
@@ -56,7 +61,7 @@ class UserController {
               code: 401,
               message : "Invalid email or password" })
           }
-
+          
         } else {
           next ({ 
             code: 401, 
