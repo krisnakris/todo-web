@@ -111,7 +111,7 @@ function logout () {
 }
 
 function fetchTodos () {
-  $("#todo-list-table tr").remove();
+  $("#todo-list-table td").remove();
 
   $.ajax({
     url : baseURL + '/todos',
@@ -124,17 +124,16 @@ function fetchTodos () {
     }
   })
   .done((response) => {
-
-    response.forEach(element => {
+    response.forEach(todo => {
  
       $("#todo-list-table").append(
         `<tr>
-        <td>${element.id}</td>
-        <td>${element.title}</td>
-        <td>${element.due_date.slice(0,10)}</td>
-        <td> <a> Update </a> | <a> Delete </a> </td>
-        
-
+          <td>${todo.id}</td>
+          <td>${todo.title}</td>
+          <td>${todo.description}</td>
+          <td>${todo.status}</td>
+          <td>${todo.due_date.slice(0,10)}</td>
+          <td> <a onclick= "updateTodo(${todo.id})"> Update </a> | <a onclick= "deleteTodo(${todo.id})"> Delete </a> </td>      
         </tr>
         `
       )
@@ -161,6 +160,31 @@ function createTodos () {
     data : {
       title, description, status, due_date
     },
+    headers : {
+      accessToken : localStorage.accessToken
+    }
+  })
+  .done((response) => {
+    checkLocalStorage();
+    home();
+    $("#todo-list-table").show();
+  })
+  .fail(err => {
+    console.log('err: ', err);
+  })
+  .always(() => {
+    $("#login-email, #login-password").val("");
+  })
+}
+
+function updateTodo (id) {
+  console.log(id);
+}
+
+function deleteTodo (id) {
+  $.ajax({
+    url : baseURL + `/todos/${id}`,
+    method: "DELETE",
     headers : {
       accessToken : localStorage.accessToken
     }
