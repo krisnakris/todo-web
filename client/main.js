@@ -21,16 +21,23 @@ $(document).ready(() => {
   $("#nav-todo-btn, #nav-home-btn").on('click', (event) => {
     event.preventDefault();
     home();
-  })
-
-  $("#nav-home-btn").on('click', (event) => {
-    event.preventDefault();
-    home();
+    $("#todo-list-table").show();
   })
 
   $("#nav-logout-btn").on('click', (event) => {
     event.preventDefault();
     logout();
+  })
+
+  $("#addTodoList").on('click', (event) => {
+    event.preventDefault();
+    $("#todo-list-table").hide();
+    $("#add-todo-list").show();
+  })
+
+  $("#addForm-submit-btn").on('click', (event) => {
+    event.preventDefault();
+    createTodos();
   })
 })
 
@@ -77,7 +84,6 @@ function login () {
   .done((response) => {
     localStorage.setItem('accessToken', response.accessToken);
     checkLocalStorage();
-    fetchTodos();
   })
   .fail(err => {
     
@@ -92,6 +98,7 @@ function checkLocalStorage () {
     $("#before-login").hide();
     $("#after-login, #nav-logout-btn").show();
     fetchTodos();
+    $("#add-todo-list").hide();
   } else {
     $("#before-login").show();
     $("#after-login, #nav-logout-btn").hide();
@@ -104,7 +111,7 @@ function logout () {
 }
 
 function fetchTodos () {
-  $("#todo-list").empty();
+  $("#todo-list-table tr").remove();
 
   $.ajax({
     url : baseURL + '/todos',
@@ -117,12 +124,49 @@ function fetchTodos () {
     }
   })
   .done((response) => {
-    console.log('response: ', response);
+
     response.forEach(element => {
-      $("#todo-list").append(
-        `<li id=${element.id} >${element.title}</li>`
+ 
+      $("#todo-list-table").append(
+        `<tr>
+        <td>${element.id}</td>
+        <td>${element.title}</td>
+        <td>${element.due_date.slice(0,10)}</td>
+        <td> <a> Update </a> | <a> Delete </a> </td>
+        
+
+        </tr>
+        `
       )
     });
+  })
+  .fail(err => {
+    console.log('err: ', err);
+  })
+  .always(() => {
+    $("#login-email, #login-password").val("");
+  })
+}
+
+function createTodos () {
+  let title = $("#addForm-title").val();
+  let description = $("#addForm-description").val();
+  let status = 'active'
+
+  let due_date = $("#addForm-due-date").val();
+
+  $.ajax({
+    url : baseURL + '/todos',
+    method: "POST",
+    data : {
+      title, description, status, due_date
+    },
+    headers : {
+      accessToken : localStorage.accessToken
+    }
+  })
+  .done((response) => {
+    checkLocalStorage();
   })
   .fail(err => {
     console.log('err: ', err);
