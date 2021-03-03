@@ -32,7 +32,14 @@ class TodoController {
         res.status(201).json({hasil, Quotes});
       })
       .catch(err => {
-        next(err)
+        if (err.name === 'SequelizeValidationError') {
+          next(err);
+        } else {
+          next( {
+            code : 500,
+            message : 'Internal server error'
+          })
+        }
       })
   }
 
@@ -93,7 +100,14 @@ class TodoController {
         res.status(200).send(object);
       })
       .catch(err => {
-        next(err)
+        if (err.name === 'SequelizeValidationError') {
+          next(err);
+        } else {
+          next( {
+            code : 500,
+            message : 'Internal server error'
+          })
+        }
       })
   }
 
@@ -127,7 +141,14 @@ class TodoController {
         res.status(200).send(object);
       })
       .catch(err => {
-        next(err);
+        if (err.name === 'SequelizeValidationError') {
+          next(err);
+        } else {
+          next( {
+            code : 500,
+            message : 'Internal server error'
+          })
+        }
       })
   }
 
@@ -140,10 +161,13 @@ class TodoController {
       }
     })
       .then(data => {
-        res.status(200).send({message : 'Todo success to delete'});
+        res.status(200).send({ message : 'Todo success to delete' });
       })
       .catch(err => {
-        res.status(500).json({ message : 'Internal server error'});
+        next({
+          code : 500,
+          message : 'Internal server error'
+        })
       })
   }
 }

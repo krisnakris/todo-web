@@ -22,7 +22,7 @@ const authorize = (req, res, next) => {
     .catch(err => {
       next({
         code : 404,
-        message : "Resource not found"
+        message : "Error not found"
       })
     })
 }
