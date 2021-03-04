@@ -113,11 +113,13 @@ class TodoController {
 
   static patchTodo (req, res, next) {
     let id = req.params.id;
-    let body = req.body;
+    console.log('id: ', id);
+    // let body = req.body;
 
-    let object = {
-      status : body.status
-    }
+    // let object = {
+    //   status : body.status
+    // }
+    let object = {};
 
     Todo.findByPk(id)
       .then(data => {
@@ -125,11 +127,19 @@ class TodoController {
         let updatedAt = data.updatedAt;
         let title = data.title;
         let description = data.description;
+        let status = data.status;
+
+        if (status == 'active') {
+          status = 'nonactive';
+        } else {
+          status = 'active';
+        }
 
         object.createdAt = createdAt;
         object.updatedAt = updatedAt;
         object.description = description;
         object.title = title;
+        object.status = status;
 
         return Todo.update(object, {
           where : {
@@ -141,6 +151,7 @@ class TodoController {
         res.status(200).send(object);
       })
       .catch(err => {
+        console.log('err: ', err);
         if (err.name === 'SequelizeValidationError') {
           next(err);
         } else {
