@@ -128,6 +128,7 @@ class TodoController {
         let title = data.title;
         let description = data.description;
         let status = data.status;
+        let due_date = data.due_date;
 
         if (status == 'active') {
           status = 'nonactive';
@@ -140,6 +141,7 @@ class TodoController {
         object.description = description;
         object.title = title;
         object.status = status;
+        object.due_date = due_date;
 
         return Todo.update(object, {
           where : {

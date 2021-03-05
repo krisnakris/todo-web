@@ -117,7 +117,7 @@ Request Header
 
 Request Body
 {
-  "status" : "nonactive",
+
 }
 
 Response 
@@ -146,6 +146,51 @@ Request Body
 Response 
 {
   message: 'todo success to delete'
+}
+
+----  POST /register  ----
+This will delete status of todos list
+
+Request Header
+{
+  "Content-Type":"application/json"
+}
+
+Request Body
+{
+{
+    "email" : "krisna.post@gmail.com",
+    "password" : "123456"
+}
+}
+
+Response 
+{
+  {
+    "id" : "1",
+    "email" : "krisna.post@gmail.com"
+  }
+}
+
+----  POST /login  ----
+This will delete status of todos list
+
+Request Header
+{
+  "Content-Type":"application/json"
+}
+
+Request Body
+{
+{
+    "email" : "krisna.post@gmail.com",
+    "password" : "123456"
+}
+}
+
+Response 
+{
+  accessToken : "1929ajf93uhuhsdivhaoi"
 }
 
 Response Code : Response Code Description

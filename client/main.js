@@ -133,7 +133,7 @@ function fetchTodos () {
           <td>${todo.description}</td>
           <td>${todo.status}</td>
           <td>${todo.due_date.slice(0,10)}</td>
-          <td> <a onclick= "updateTodo(${todo.id})"> Update </a> | <a onclick= "deleteTodo(${todo.id})"> Delete </a> </td>      
+          <td> <a onclick= "updateTodo(${todo.id})"> Update </a> | <a onclick= "deleteTodo(${todo.id})"> Delete </a> | <a onclick= "changeStatusTodo(${todo.id})"> Change Status </a></td>      
         </tr>
         `
       )
@@ -198,5 +198,9 @@ function deleteTodo (id) {
   .always(() => {
     $("#login-email, #login-password").val("");
   })
+}
 
+function changeStatusTodo (id) {
+  console.log(id);
+  // console.log(status);
 }
