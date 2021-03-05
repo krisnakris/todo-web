@@ -61,8 +61,12 @@ function register () {
   })
   .done(home)
 
-  .fail(err => {
-    console.log('err: ', err);
+  .fail((xhr, text) => {
+    console.log(xhr);
+    swal({
+      icon: "error",
+      text: xhr.responseJSON.message
+    })
   })
   .always(() => {
     $("#register-email, #register-password").val("");
@@ -85,8 +89,11 @@ function login () {
     localStorage.setItem('accessToken', response.accessToken);
     checkLocalStorage();
   })
-  .fail(err => {
-    
+  .fail((xhr, text) => {
+    swal({
+      icon: "error",
+      text: xhr.responseJSON.message
+    })
   })
   .always(() => {
     $("#login-email, #login-password").val("");
@@ -134,8 +141,7 @@ function fetchTodos () {
           <td>${todo.status}</td>
           <td>${todo.due_date.slice(0,10)}</td>
           <td> <a onclick= "updateTodo(${todo.id})"> Update </a> | <a onclick= "deleteTodo(${todo.id})"> Delete </a> | <a onclick= "changeStatusTodo(${todo.id})"> Change Status </a></td>      
-        </tr>
-        `
+        </tr>`
       )
     });
   })
@@ -169,8 +175,11 @@ function createTodos () {
     home();
     $("#todo-list-table").show();
   })
-  .fail(err => {
-    console.log('err: ', err);
+  .fail((xhr, text) => {
+    swal({
+      icon: "error",
+      text: xhr.responseJSON.message[0]
+    })
   })
   .always(() => {
     $("#login-email, #login-password").val("");
