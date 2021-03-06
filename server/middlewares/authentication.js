@@ -1,13 +1,37 @@
 const jwt = require('jsonwebtoken');
+const {User} = require('../models');
 
 const authenticate = (req, res, next) => {
   try {
     const token = req.headers.accesstoken;
     const decoded = jwt.verify(token, process.env.SECRETKEY);
-    req.headers.decoded = decoded;
-    next();
+    let {id, email} = decoded;
+
+    User.findOne({
+      where: {
+        id, email
+      }
+    })
+      .then(userDb => {
+        if (userDb) {
+          req.headers.decoded = decoded;
+          next();
+        } else {
+          next({
+            code: 401, 
+            message : "Your email not registered"
+          })
+        }
+      })
+      .catch(err => {
+        next({
+          code : 500,
+          message : 'Internal server error'
+        })
+      })
+
   }
-  catch (err) {
+  catch(err) {
     next({
       code: 401, 
       message : "Invalid token"

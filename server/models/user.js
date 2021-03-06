@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         notNull: {
           args: true,
-          msg: 'Field User cannot be empty'
+          msg: 'Field Email cannot be empty'
         }
       }
     },

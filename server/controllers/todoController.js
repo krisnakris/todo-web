@@ -5,10 +5,16 @@ class TodoController {
   static createTodo (req, res, next) {
     let body = req.body;
 
+    let status = !body.status ? 'active' : body.status;
+
+    if (status !== 'active' || status !== 'nonactive') {
+      status = 'active';
+    } 
+
     let object = {
       title: body.title,
       description : body.description,
-      status : body.status,
+      status,
       due_date : body.due_date
     }
 
@@ -18,7 +24,7 @@ class TodoController {
 
     Todo.create(object)
       .then(data => {
-        hasil = data;
+        
         return axios({
           method : 'GET',
           url : 'https://stoicquotesapi.com/v1/api/quotes/random'
@@ -29,7 +35,7 @@ class TodoController {
           quote : quotes.data.body,
           author : quotes.data.author
         };
-        res.status(201).json({Todo : hasil, Quotes});
+        res.status(201).json({Quotes});
       })
       .catch(err => {
         if (err.name === 'SequelizeValidationError') {
@@ -116,12 +122,12 @@ class TodoController {
 
   static patchTodo (req, res, next) {
     let id = req.params.id;
-    // let body = req.body;
+    let body = req.body;
 
-    // let object = {
-    //   status : body.status
-    // }
-    let object = {};
+    let object = {
+      status : body.status
+    }
+    // let object = {};
 
     Todo.findByPk(id)
       .then(data => {
@@ -129,7 +135,7 @@ class TodoController {
         let updatedAt = data.updatedAt;
         let title = data.title;
         let description = data.description;
-        let status = data.status;
+        // let status = data.status;
         let due_date = data.due_date;
 
         if (status == 'active') {
@@ -155,7 +161,6 @@ class TodoController {
         res.status(200).send(object);
       })
       .catch(err => {
-        console.log('err: ', err);
         if (err.name === 'SequelizeValidationError') {
           next(err);
         } else {

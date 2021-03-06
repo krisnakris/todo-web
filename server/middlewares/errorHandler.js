@@ -8,14 +8,16 @@ function errorHandler (err, req, res, next) {
     }
     res.status(400).json({
       message: err.message,
-      ListErrors : errors
+      errors
     })
+  } else if (err.code == 400) {
+    res.status(400).json({errors : err.message});
   } else if (err.code == 401) {
-    res.status(err.code).json({message : err.message});
+    res.status(err.code).json({errors : err.message});
   } else if (err.code == 404) {
-    res.status(err.code).json({message : err.message});
+    res.status(err.code).json({errors : err.message});
   } else if (err.code == 500) {
-    res.status(err.code).json({message : err.message});
+    res.status(err.code).json({errors : err.message});
   } 
 
 }

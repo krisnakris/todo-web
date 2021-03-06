@@ -15,12 +15,9 @@ class UserController {
 
     User.create(object)
       .then(data => {
-          let createdUser = {
-          id : data.id,
-          email : data.email
-        }
+        let id = data.id;
         
-        res.status(201).json({success: true, message: 'User created', createdUser})
+        res.status(201).json({id, email})
       })
       .catch(err => {
         if (err.name === 'SequelizeValidationError' || err.name === 'SequelizeUniqueConstraintError') {
@@ -61,14 +58,14 @@ class UserController {
           } else {
             next ({
               name: "customError", 
-              code: 401,
+              code: 400,
               message : "Invalid email or password" })
           }
           
         } else {
           next ({
             name: "customError",  
-            code: 401, 
+            code: 400, 
             message : "Invalid email or password" })
         }
       })
