@@ -58,19 +58,20 @@ class UserController {
             )
             res.status(200).json({ accessToken }) 
           } else {
-            next ({ 
+            next ({
+              name: "customError", 
               code: 401,
               message : "Invalid email or password" })
           }
           
         } else {
-          next ({ 
+          next ({
+            name: "customError",  
             code: 401, 
             message : "Invalid email or password" })
         }
       })
       .catch(err => {
-        console.log('err: ', err);
         if (err.name === 'SequelizeValidationError' || err.name === 'SequelizeUniqueConstraintError') {
           next(err);
         } else {

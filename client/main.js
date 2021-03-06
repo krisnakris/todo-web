@@ -62,7 +62,6 @@ function register () {
   .done(home)
 
   .fail((xhr, text) => {
-    console.log(xhr);
     swal({
       icon: "error",
       text: xhr.responseJSON.message
@@ -145,8 +144,11 @@ function fetchTodos () {
       )
     });
   })
-  .fail(err => {
-    console.log('err: ', err);
+  .fail((xhr, text) => {
+    swal({
+      icon: "error",
+      text: xhr.responseJSON.message
+    })
   })
   .always(() => {
     $("#login-email, #login-password").val("");
@@ -201,15 +203,36 @@ function deleteTodo (id) {
   .done((response) => {
     checkLocalStorage();
   })
-  .fail(err => {
-    console.log('err: ', err);
+  .fail((xhr, text) => {
+    swal({
+      icon: "error",
+      text: xhr.responseJSON.message[0]
+    })
   })
   .always(() => {
-    $("#login-email, #login-password").val("");
+
   })
 }
 
 function changeStatusTodo (id) {
-  console.log(id);
-  // console.log(status);
+  $.ajax({
+    url : baseURL + `/todos/${id}`,
+    method: "PATCH",
+    headers : {
+      accessToken : localStorage.accessToken
+    }
+  })
+  .done((response) => {
+    swal("Success Change Status", "", "success");
+    checkLocalStorage();
+  })
+  .fail((xhr, text) => {
+    console.log('xhr: ', xhr);
+    swal("Unauthorize", "You don't have permission to change this item", "error");
+
+  })
+  .always(() => {
+
+  })
+
 }

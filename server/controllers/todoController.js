@@ -44,8 +44,12 @@ class TodoController {
   }
 
   static getTodo (req, res, next) {
-    Todo.findAll() 
+    Todo.findAll({
+      order : [['due_date', 'DESC']]
+      }
+    ) 
       .then(data => {
+        console.log('data: ', data);
         res.status(200).send(data);
       })
       .catch(err => {

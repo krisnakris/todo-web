@@ -16,7 +16,7 @@ function errorHandler (err, req, res, next) {
     res.status(err.code).json({message : err.message});
   } else if (err.code == 500) {
     res.status(err.code).json({message : err.message});
-  }
+  } 
 
 }
 

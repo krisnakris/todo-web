@@ -8,8 +8,9 @@ const authenticate = (req, res, next) => {
     next();
   }
   catch (err) {
-    res.status(401).json({
-      message : 'Token invalid'
+    next({
+      code: 401, 
+      message : "Invalid token"
     })
   }
 }

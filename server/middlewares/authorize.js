@@ -14,15 +14,15 @@ const authorize = (req, res, next) => {
         next();
       } else {
         next({
-          code : 401,
-          message : "Unauthorized"
+          code: 401, 
+          message : "Unauthorize"
         })
       }
     })
     .catch(err => {
       next({
-        code : 404,
-        message : "Error not found"
+        code: 404, 
+        message : "Not Found"
       })
     })
 }
