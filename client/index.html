@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="google-signin-client_id" content="728845551866-bct71289h8fm9clgfr88onupf58rg6et.apps.googleusercontent.com">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
@@ -40,8 +41,12 @@
           <input type="password" class="form-control" id="login-password" placeholder="Enter password" name="password">
         </div>
 
-        <button type="submit" class="btn-primary login-btn" id="login-btn">Login</button>
-        <a id="login-register-btn">Sign Up</a>
+        <div>
+          <button type="submit" class="btn-primary login-btn" id="login-btn">Login</button>
+          <a id="login-register-btn">Sign Up</a>
+          <div class="g-signin2" data-onsuccess="onSignIn"></div>
+        </div>
+
       </form>
     </div>
     <!-- Form Untuk login -->
@@ -142,6 +147,7 @@
 
   </div>
 
+  <script src="https://apis.google.com/js/platform.js" async defer></script>
   <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
   <script src="main.js"></script>
 </body>

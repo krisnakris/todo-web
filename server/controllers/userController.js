@@ -1,6 +1,7 @@
 const {User} = require('../models')
 const {comparePassword} = require('../helpers/bcrypt');
 const jwt = require('jsonwebtoken');
+const {OAuth2Client} = require('google-auth-library');
 
 class UserController {
   static register (req, res, next) {
@@ -80,6 +81,39 @@ class UserController {
             message : 'Internal server error'
           })
         }
+      })
+  }
+
+  static googleLogin (req, res, next) {
+    const client = new OAuth2Client(process.env.CLIENT_ID);
+    
+    client.verifyIdToken({
+      idToken : req.body.googleToken,
+      audience : process.env.CLIENT_ID
+    })
+      .then(ticket => {
+        const payload = ticket.getPayload();
+        let email = payload.email;
+
+        return User.findOrCreate({
+          where : {email},
+          defaults: {
+            email, 
+            password : process.env.PASS_GOOGLEUSER
+          }
+        })
+          .then(userDb => {
+            let id = userDb.id;
+            const token = jwt.sign({
+              id : userDb.id,
+              email
+            }, process.env.SECRETKEY);
+            res.status(200).json({id, email, accessToken : token});
+          })
+      })
+      next({
+        code : 500,
+        message : 'Internal server error'
       })
   }
 }

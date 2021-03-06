@@ -106,6 +106,30 @@ function login () {
   })
 }
 
+function onSignIn(googleUser) {
+  // var profile = googleUser.getBasicProfile();
+  // console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+  // console.log('Name: ' + profile.getName());
+  // console.log('Image URL: ' + profile.getImageUrl());
+  // console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+  var id_token = googleUser.getAuthResponse().id_token;
+  $.ajax ({
+    url : baseURL + '/googleLogin',
+    method : "POST",
+    data : {
+      googleToken : id_token
+    }
+  })
+    .done(response => {
+      localStorage.setItem('accessToken', response.accessToken);
+      checkLocalStorage();
+    })
+    .fail(err => {
+      console.log(err);
+    })
+}
+
+
 function checkLocalStorage () {
   if (localStorage.accessToken) {
     $("#before-login").hide();
@@ -123,7 +147,13 @@ function logout () {
   localStorage.removeItem('accessToken');
   swal("Success Logout", "", "success");
   checkLocalStorage();
+  var auth2 = gapi.auth2.getAuthInstance();
+  auth2.signOut().then(function () {
+    console.log('User signed out.');
+  });
 }
+
+
 
 function fetchTodos () {
   $("#todo-list-table td").remove();
@@ -183,7 +213,7 @@ function createTodos () {
   .done((response) => {
     let quote =  response.Quotes.quote;
     let author =  response.Quotes.author;
-    let message = `${quote} ` + `(${author})` 
+    let message = `${quote} ` + `(${author})`;
 
     swal("Success Create Todos", message, "success");
     checkLocalStorage();
