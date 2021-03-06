@@ -181,7 +181,11 @@ function createTodos () {
     }
   })
   .done((response) => {
-    swal("Success Create Todos", "added todo to list", "success");
+    let quote =  response.Quotes.quote;
+    let author =  response.Quotes.author;
+    let message = `${quote} ` + `(${author})` 
+
+    swal("Success Create Todos", message, "success");
     checkLocalStorage();
     $("#todo-list-table").show();
   })
@@ -341,3 +345,4 @@ function updateTodo () {
     })
   
 }
+
