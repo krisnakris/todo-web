@@ -39,6 +39,11 @@ $(document).ready(() => {
     event.preventDefault();
     createTodos();
   })
+
+  $("#editForm-submit-btn").on('click', (event) => {
+    event.preventDefault();
+    updateTodo();
+  })
 })
 
 function home() {
@@ -105,6 +110,7 @@ function checkLocalStorage () {
     $("#after-login, #nav-logout-btn").show();
     fetchTodos();
     $("#add-todo-list").hide();
+    $("#edit-todo-list").hide();
   } else {
     $("#before-login").show();
     $("#after-login, #nav-logout-btn").hide();
@@ -173,9 +179,8 @@ function createTodos () {
     }
   })
   .done((response) => {
-    swal("Success Create Todos", response.message, "success");
+    swal("Success Create Todos", "added todo to list", "success");
     checkLocalStorage();
-    home();
     $("#todo-list-table").show();
   })
   .fail((xhr, text) => {
@@ -188,10 +193,6 @@ function createTodos () {
   .always(() => {
     $("#login-email, #login-password").val("");
   })
-}
-
-function updateTodo (id) {
-  console.log(id);
 }
 
 function deleteTodo (id) {
@@ -238,5 +239,67 @@ function changeStatusTodo (id) {
 }
 
 function updateTodoForm (id) {
+  $("#todo-list-table").hide();
+  $.ajax({
+    url : baseURL + '/todos/' + id,
+    method : "GET",
+    headers : {
+      accessToken : localStorage.accessToken
+    }
+  })
+  .done((response) => {
+    let responseStatus = response.status;
+    if (responseStatus == "active") {
+      $("#edit-active-check").prop("checked", true);
+    } else {
+      $("#edit-active-check").prop("checked", false);
+    }
+    $("#editForm-title").val(response.title)
+    $("#editForm-description").val(response.description)
+    $("#editForm-due-date").val(response.due_date.slice(0, 10))
+    $("#editForm-id").val(`${id}`);
+    $("#edit-todo-list").show();
+  })
+}
 
+function updateTodo () {
+  let id = $("#editForm-id").val();
+  let due_date =  $("#editForm-due-date").val();
+  let description = $("#editForm-description").val();
+  let title = $("#editForm-title").val();
+  let status = $("#edit-active-check").is(":checked");
+
+  if (status) {
+    status = 'active'
+  } else {
+    status = 'nonactive'
+  }
+
+  let object = {id, due_date, description, title, status}
+
+  $.ajax({
+    url : baseURL + '/todos/' + id,
+    method : "PUT",
+    headers : {
+      accessToken : localStorage.accessToken
+    },
+    data : object
+  })
+    .done((response) => {
+      swal("Success Edit Todos", "", "success");
+      checkLocalStorage();
+      $("#todo-list-table").show();
+      $("#edit-todo-list").hide();
+    })
+    .fail((xhr, text) => {
+      swal(
+        "Error",
+        xhr.responseJSON.message,
+        "error"
+      )
+    })
+    .always(() => {
+
+    })
+  
 }

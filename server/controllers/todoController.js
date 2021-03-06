@@ -116,7 +116,6 @@ class TodoController {
 
   static patchTodo (req, res, next) {
     let id = req.params.id;
-    console.log('id: ', id);
     // let body = req.body;
 
     // let object = {
