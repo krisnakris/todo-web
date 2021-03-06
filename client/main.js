@@ -64,8 +64,10 @@ function register () {
       password
     }
   })
-  .done(home)
-
+  .done((response) => {
+    home();
+    swal("Success Register", "You can now login", "success");
+  })
   .fail((xhr, text) => {
     swal({
       icon: "error",
@@ -119,6 +121,7 @@ function checkLocalStorage () {
 
 function logout () {
   localStorage.removeItem('accessToken');
+  swal("Success Logout", "", "success");
   checkLocalStorage();
 }
 
@@ -165,7 +168,6 @@ function createTodos () {
   let title = $("#addForm-title").val();
   let description = $("#addForm-description").val();
   let status = 'active'
-
   let due_date = $("#addForm-due-date").val();
 
   $.ajax({
@@ -195,26 +197,59 @@ function createTodos () {
   })
 }
 
-function deleteTodo (id) {
-  $.ajax({
-    url : baseURL + `/todos/${id}`,
-    method: "DELETE",
-    headers : {
-      accessToken : localStorage.accessToken
-    }
-  })
-  .done((response) => {
-    checkLocalStorage();
-  })
-  .fail((xhr, text) => {
-    swal({
-      icon: "error",
-      text: xhr.responseJSON.message[0]
-    })
-  })
-  .always(() => {
+// function deleteTodo (id) {
+//   $.ajax({
+//     url : baseURL + `/todos/${id}`,
+//     method: "DELETE",
+//     headers : {
+//       accessToken : localStorage.accessToken
+//     }
+//   })
+//   .done((response) => {
+//     checkLocalStorage();
+//   })
+//   .fail((xhr, text) => {
+//     swal("Unauthorize", "You don't have permission to change this item", "error");
+//   })
+//   .always(() => {
 
+//   })
+// }
+
+function deleteTodo (id) {
+  swal({
+    title: "Are you sure?",
+    text: "Once deleted, you will not be able to recover this todos!",
+    icon: "warning",
+    buttons: true,
+    dangerMode: true,
   })
+  .then((willDelete) => {
+    if (willDelete) {
+      $.ajax({
+        url : baseURL + `/todos/${id}`,
+        method: "DELETE",
+        headers : {
+          accessToken : localStorage.accessToken
+        }
+      })
+      .done((response) => {
+        checkLocalStorage();
+        swal("Poof! Your todos has been deleted!", {
+          icon: "success",
+        });
+      })
+      .fail((xhr, text) => {
+        swal("Unauthorize", "You don't have permission to change this item", "error");
+      })
+      .always(() => {
+    
+      })
+    } else {
+      swal("Your todos is safe!");
+    }
+  });
+ 
 }
 
 function changeStatusTodo (id) {
@@ -239,7 +274,6 @@ function changeStatusTodo (id) {
 }
 
 function updateTodoForm (id) {
-  $("#todo-list-table").hide();
   $.ajax({
     url : baseURL + '/todos/' + id,
     method : "GET",
@@ -258,7 +292,11 @@ function updateTodoForm (id) {
     $("#editForm-description").val(response.description)
     $("#editForm-due-date").val(response.due_date.slice(0, 10))
     $("#editForm-id").val(`${id}`);
+    $("#todo-list-table").hide();
     $("#edit-todo-list").show();
+  })
+  .fail((xhr, text) => {
+    swal("Unauthorize", "You don't have permission to change this item", "error");
   })
 }
 
