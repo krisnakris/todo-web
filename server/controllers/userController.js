@@ -108,9 +108,8 @@ class UserController {
             res.status(200).json({id, email, accessToken : token});
           })
       })
-      next({
-        code : 500,
-        message : 'Internal server error'
+      .catch(err => {
+        
       })
   }
 }

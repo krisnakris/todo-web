@@ -71,7 +71,6 @@ function register () {
   .fail((xhr, text) => {
     swal({
       icon: "error",
-      text: xhr.responseJSON.message
     })
   })
   .always(() => {
@@ -107,11 +106,6 @@ function login () {
 }
 
 function onSignIn(googleUser) {
-  // var profile = googleUser.getBasicProfile();
-  // console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-  // console.log('Name: ' + profile.getName());
-  // console.log('Image URL: ' + profile.getImageUrl());
-  // console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
   var id_token = googleUser.getAuthResponse().id_token;
   $.ajax ({
     url : baseURL + '/googleLogin',
@@ -124,8 +118,11 @@ function onSignIn(googleUser) {
       localStorage.setItem('accessToken', response.accessToken);
       checkLocalStorage();
     })
-    .fail(err => {
-      console.log(err);
+    .fail((xhr, text) => {
+      swal({
+        icon: "error",
+        text: "Cannot login with google"
+      })
     })
 }
 
@@ -178,7 +175,7 @@ function fetchTodos () {
           <td>${todo.description}</td>
           <td>${todo.status}</td>
           <td>${todo.due_date.slice(0,10)}</td>
-          <td> <a onclick= "updateTodoForm(${todo.id})"> Update </a> | <a onclick= "deleteTodo(${todo.id})"> Delete </a> | <a onclick= "changeStatusTodo(${todo.id})"> Change Status </a></td>      
+          <td> <a onclick= "updateTodoForm(${todo.id})"> Update </a> | <a onclick= "deleteTodo(${todo.id})"> Delete </a> | <a onclick= "changeStatusTodoGet(${todo.id})"> Change Status </a></td>      
         </tr>`
       )
     });
@@ -231,25 +228,6 @@ function createTodos () {
   })
 }
 
-// function deleteTodo (id) {
-//   $.ajax({
-//     url : baseURL + `/todos/${id}`,
-//     method: "DELETE",
-//     headers : {
-//       accessToken : localStorage.accessToken
-//     }
-//   })
-//   .done((response) => {
-//     checkLocalStorage();
-//   })
-//   .fail((xhr, text) => {
-//     swal("Unauthorize", "You don't have permission to change this item", "error");
-//   })
-//   .always(() => {
-
-//   })
-// }
-
 function deleteTodo (id) {
   swal({
     title: "Are you sure?",
@@ -283,15 +261,38 @@ function deleteTodo (id) {
       swal("Your todos is safe!");
     }
   });
- 
 }
 
-function changeStatusTodo (id) {
+function changeStatusTodoGet (id) {
+  $.ajax({
+    url : baseURL + '/todos/' + id,
+    method : "GET",
+    headers : {
+      accessToken : localStorage.accessToken
+    }
+  })
+  .done((response) => {
+    let status = response.status;
+    if (status == 'active') {
+      status = 'nonactive';
+    } else {
+      status = 'active';
+    }
+    changeStatusTodo(id, status);
+  })
+  .fail((xhr, text) => {
+  })
+}
+
+function changeStatusTodo (id, status) {
   $.ajax({
     url : baseURL + `/todos/${id}`,
     method: "PATCH",
     headers : {
       accessToken : localStorage.accessToken
+    },
+    data : {
+      status
     }
   })
   .done((response) => {

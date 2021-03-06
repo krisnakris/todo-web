@@ -5,11 +5,11 @@ const authenticate = (req, res, next) => {
   try {
     const token = req.headers.accesstoken;
     const decoded = jwt.verify(token, process.env.SECRETKEY);
-    let {id, email} = decoded;
+    let {email} = decoded;
 
     User.findOne({
       where: {
-        id, email
+        email
       }
     })
       .then(userDb => {
@@ -24,6 +24,7 @@ const authenticate = (req, res, next) => {
         }
       })
       .catch(err => {
+        console.log('err: ', err);
         next({
           code : 500,
           message : 'Internal server error'
