@@ -139,7 +139,7 @@ function fetchTodos () {
           <td>${todo.description}</td>
           <td>${todo.status}</td>
           <td>${todo.due_date.slice(0,10)}</td>
-          <td> <a onclick= "updateTodo(${todo.id})"> Update </a> | <a onclick= "deleteTodo(${todo.id})"> Delete </a> | <a onclick= "changeStatusTodo(${todo.id})"> Change Status </a></td>      
+          <td> <a onclick= "updateTodoForm(${todo.id})"> Update </a> | <a onclick= "deleteTodo(${todo.id})"> Delete </a> | <a onclick= "changeStatusTodo(${todo.id})"> Change Status </a></td>      
         </tr>`
       )
     });
@@ -173,15 +173,17 @@ function createTodos () {
     }
   })
   .done((response) => {
+    swal("Success Create Todos", response.message, "success");
     checkLocalStorage();
     home();
     $("#todo-list-table").show();
   })
   .fail((xhr, text) => {
-    swal({
-      icon: "error",
-      text: xhr.responseJSON.message[0]
-    })
+    swal(
+      "Error",
+      xhr.responseJSON.message,
+      "error"
+    )
   })
   .always(() => {
     $("#login-email, #login-password").val("");
@@ -227,12 +229,14 @@ function changeStatusTodo (id) {
     checkLocalStorage();
   })
   .fail((xhr, text) => {
-    console.log('xhr: ', xhr);
     swal("Unauthorize", "You don't have permission to change this item", "error");
-
   })
   .always(() => {
 
   })
+
+}
+
+function updateTodoForm (id) {
 
 }

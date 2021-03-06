@@ -29,7 +29,7 @@ class TodoController {
           quote : quotes.data.body,
           author : quotes.data.author
         };
-        res.status(201).json({hasil, Quotes});
+        res.status(201).json({Todo : hasil, Quotes});
       })
       .catch(err => {
         if (err.name === 'SequelizeValidationError') {
@@ -49,7 +49,6 @@ class TodoController {
       }
     ) 
       .then(data => {
-        console.log('data: ', data);
         res.status(200).send(data);
       })
       .catch(err => {

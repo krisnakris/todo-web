@@ -22,7 +22,12 @@ module.exports = (sequelize, DataTypes) => {
         notNull: {
           args: true,
           msg: 'Field Title cannot be empty'
-        }
+        },
+        customValid (value) {
+          if (!value) {
+            throw new Error('Field Title cannot be empty');
+          }
+        }     
       }
     },
     description: {
@@ -32,7 +37,12 @@ module.exports = (sequelize, DataTypes) => {
         notNull: {
           args: true,
           msg: 'Field Description cannot be empty'
-        }
+        },
+        customValid (value) {
+          if (!value) {
+            throw new Error('Field Description cannot be empty');
+          }
+        }    
       }
     },
     status: {
@@ -46,18 +56,31 @@ module.exports = (sequelize, DataTypes) => {
         isIn: {
           args :[['active', 'nonactive']], 
           msg: 'Input status with active or nonactive'
-        }
+        },
+        customValid (value) {
+          if (!value) {
+            throw new Error('Field Description cannot be empty');
+          }
+        }    
       }
     },
     due_date: {
       type: DataTypes.DATE,
       allowNull: false,
       validate: {
-        isBefore: `${new Date()}`,
         notNull: {
           args: true,
           msg: 'Field Due Date cannot be empty'
-        }
+        },
+        isAfter: {
+          args : `${new Date()}`,
+          msg  : 'Due Date must after today'
+        },
+        customValid (value) {
+          if (!value) {
+            throw new Error('Field Description cannot be empty');
+          }
+        }    
       }
     }
   }, {
