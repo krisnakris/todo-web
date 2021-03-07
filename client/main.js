@@ -97,7 +97,7 @@ function login () {
   .fail((xhr, text) => {
     swal({
       icon: "error",
-      text: xhr.responseJSON.message
+      text: xhr.responseJSON.errors
     })
   })
   .always(() => {
@@ -264,6 +264,7 @@ function deleteTodo (id) {
 }
 
 function changeStatusTodoGet (id) {
+  console.log('id: ', id);
   $.ajax({
     url : baseURL + '/todos/' + id,
     method : "GET",
@@ -281,6 +282,7 @@ function changeStatusTodoGet (id) {
     changeStatusTodo(id, status);
   })
   .fail((xhr, text) => {
+    swal("Unauthorize", "You don't have permission to change this item", "error");
   })
 }
 
