@@ -1,4 +1,4 @@
-const {Todo} = require('../models');
+const {Todo, User} = require('../models');
 const axios = require('axios');
 
 class TodoController {
@@ -51,11 +51,16 @@ class TodoController {
 
   static getTodo (req, res, next) {
     Todo.findAll({
+      attributes : ['id', 'title', 'description','status','due_date'],
+      include : [{
+        model : User, 
+        attributes: ['email']
+      }],
       order : [['due_date', 'DESC']]
       }
     ) 
-      .then(data => {
-        res.status(200).send(data);
+      .then(todo => {
+        res.status(200).send(todo);
       })
       .catch(err => {
         next({
