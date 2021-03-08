@@ -89,24 +89,34 @@ UserId (integer)
 Response 
 [
   {
-    "id": 68,
-    "title": "Krisna",
-    "description": "arere2",
+    "id": 79,
+    "title": "makan5",
+    "description": "banyak",
     "status": "active",
-    "due_date": "2021-03-17T00:00:00.000Z",
-    "createdAt": "2021-03-06T08:37:12.519Z",
-    "updatedAt": "2021-03-06T08:45:50.353Z",
-    "UserId": 12
+    "due_date": "2021-03-15T00:00:00.000Z",
+    "User": {
+        "email": "krisna@mail.com"
+    }
   },
   {
-    "id": 67,
-    "title": "Krisna",
-    "description": "arere",
+    "id": 77,
+    "title": "makan5",
+    "description": "banyak",
     "status": "active",
-    "due_date": "2021-03-17T00:00:00.000Z",
-    "createdAt": "2021-03-06T08:37:02.610Z",
-    "updatedAt": "2021-03-06T08:45:52.025Z",
-    "UserId": 12
+    "due_date": "2021-03-15T00:00:00.000Z",
+    "User": {
+        "email": "krisna@mail.com"
+    }
+  },
+  {
+    "id": 86,
+    "title": "makan6",
+    "description": "banyak",
+    "status": "nonactive",
+    "due_date": "2021-03-15T00:00:00.000Z",
+    "User": {
+        "email": "krisna@mail.com"
+    }
   }
 ]
 

@@ -1,4 +1,5 @@
-const baseURL = 'https://fancy-todo-kris.herokuapp.com';
+// const baseURL = 'https://fancy-todo-kris.herokuapp.com';
+const baseURL = 'http://localhost:3000'
 
 $(document).ready(() => {
   home();
@@ -167,7 +168,6 @@ function fetchTodos () {
   })
   .done((response) => {
     response.forEach(todo => {
- 
       $("#todo-list-table").append(
         `<tr>
           <td>${todo.id}</td>
@@ -175,6 +175,7 @@ function fetchTodos () {
           <td>${todo.description}</td>
           <td>${todo.status}</td>
           <td>${todo.due_date.slice(0,10)}</td>
+          <td>${todo.User.email}</td>
           <td> <a onclick= "updateTodoForm(${todo.id})"> Update </a> | <a onclick= "deleteTodo(${todo.id})"> Delete </a> | <a onclick= "changeStatusTodoGet(${todo.id})"> Change Status </a></td>      
         </tr>`
       )
