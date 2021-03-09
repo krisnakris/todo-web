@@ -19,7 +19,6 @@ class TodoController {
     }
 
     let header = req.headers;
-    console.log('header: ', header);
     object.UserId = header.decoded.id;
     let id = null;
 

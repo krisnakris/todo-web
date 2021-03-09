@@ -5,7 +5,6 @@ const authenticate = (req, res, next) => {
   try {
     const token = req.headers.accesstoken;
     const decoded = jwt.verify(token, process.env.SECRETKEY);
-    console.log('decoded: ', decoded);
     let {email} = decoded;
 
     User.findOne({
