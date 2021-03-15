@@ -100,9 +100,9 @@ class UserController {
           }
         })
           .then(userDb => {
-            let id = userDb.id;
+            let id = userDb[0].id;
             const token = jwt.sign({
-              id : userDb.id,
+              id,
               email
             }, process.env.SECRETKEY);
             res.status(200).json({id, email, accessToken : token});

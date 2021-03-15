@@ -14,7 +14,6 @@ const authenticate = (req, res, next) => {
     })
       .then(userDb => {
         if (userDb) {
-          decoded.id = userDb.id;
           req.headers.decoded = decoded;
           next();
         } else {
@@ -31,7 +30,7 @@ const authenticate = (req, res, next) => {
           message : 'Internal server error'
         })
       })
-
+      
   }
   catch(err) {
     next({

@@ -368,14 +368,47 @@ Content :
     "password" : "123456"
 }
 
-
 Success Response
 Code : 200
 Data params :
 - accessToken (string)
 
 Content :
+{ 
+  "accessToken" : eyJhbGciOiJIUzI9NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjgsImVtYWlsIjoia3Jpc25hQG1haWwuY29tIiwiaWF0IjoxNjE1MDM2MjY1fQ.Ki3UfsXvzUr8-wfNoyJrPBba7NW4OBviFBgqP7WBBH8
+}
+
+----------------------------  POST /googleLogin  ----------------------------
+This will allow sign in from google
+
+Request Header
 {
+  "Content-Type":"application/json"
+}
+
+Request Body
+
+Data params : 
+- googleToken (string) | required : Token Id from google
+
+
+Content :
+{
+  "googleToken" : "juause90fu09eu9fia09d"
+}
+
+
+Success Response
+Code : 200
+Data params :
+- accessToken (string)
+- id (integer)
+- email (string)
+
+Content :
+{ 
+  "id" : "1",
+  "email" : "kris@gmail.com",
   "accessToken" : eyJhbGciOiJIUzI9NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjgsImVtYWlsIjoia3Jpc25hQG1haWwuY29tIiwiaWF0IjoxNjE1MDM2MjY1fQ.Ki3UfsXvzUr8-wfNoyJrPBba7NW4OBviFBgqP7WBBH8
 }
 
