@@ -1,7 +1,7 @@
 const {User} = require('../models')
 const {comparePassword} = require('../helpers/bcrypt');
-const jwt = require('jsonwebtoken');
 const {OAuth2Client} = require('google-auth-library');
+const { createToken }  = require('../helpers/jwt');
 
 class UserController {
   static register (req, res, next) {
@@ -49,11 +49,9 @@ class UserController {
           let email = user[0].email;
 
           if (checkPassword) {
-            const accessToken = jwt.sign({ 
+            const accessToken = createToken({ 
               id, email
-            },
-              process.env.SECRETKEY
-            )
+            })
             res.status(200).json({ accessToken }) 
           } else {
             next ({
@@ -101,10 +99,10 @@ class UserController {
         })
           .then(userDb => {
             let id = userDb[0].id;
-            const token = jwt.sign({
+            const token = createToken({
               id,
               email
-            }, process.env.SECRETKEY);
+            });
             res.status(200).json({id, email, accessToken : token});
           })
       })

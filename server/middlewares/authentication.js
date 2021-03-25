@@ -1,11 +1,12 @@
-const jwt = require('jsonwebtoken');
 const {User} = require('../models');
+const { verifyToken } = require('../helpers/jwt');
 
 const authenticate = (req, res, next) => {
   try {
     const token = req.headers.accesstoken;
-    const decoded = jwt.verify(token, process.env.SECRETKEY);
-    let {email} = decoded;
+    const decoded = verifyToken(token);
+    console.log('decoded: ', decoded);
+    let { email } = decoded;
 
     User.findOne({
       where: {
@@ -14,7 +15,7 @@ const authenticate = (req, res, next) => {
     })
       .then(userDb => {
         if (userDb) {
-          req.headers.decoded = decoded;
+          req.currentUser = decoded;
           next();
         } else {
           next({
@@ -33,6 +34,7 @@ const authenticate = (req, res, next) => {
       
   }
   catch(err) {
+    console.log(err);
     next({
       code: 401, 
       message : "Invalid token"

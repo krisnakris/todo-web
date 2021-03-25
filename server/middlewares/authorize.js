@@ -2,7 +2,9 @@ const {Todo} = require('../models');
 
 const authorize = (req, res, next) => {
   let id = req.params.id;
-  let headerId = req.headers.decoded.id;
+  console.log('masukkk');
+  console.log(req.currentUser);
+  let headerId = req.currentUser.id;
 
   Todo.findByPk(id, {
     where : {
